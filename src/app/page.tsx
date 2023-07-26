@@ -1,95 +1,106 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+"use client";
+
+import * as S from "./styles";
+import background from "./img/ecobg.png";
+import CountUp from "./Components/CountUp";
+import { useEffect, useState } from "react";
+
+import Chart from "chart.js/auto";
+import { CategoryScale } from "chart.js";
+
+import LineChart from "./Components/LineChart";
 
 export default function Home() {
+  const [running, setRunning] = useState(true);
+  const [seconds, setSeconds] = useState(0);
+  const [minutes, setMinutes] = useState(0);
+  const [hours, setHours] = useState(0);
+  const [days, setDays] = useState(0);
+  const [items, setItems] = useState([]);
+
+  Chart.register(CategoryScale);
+
+  useEffect(() => {
+    const fixedDate = new Date(2023, 6, 24, 15, 0, 0);
+
+    let interval;
+    if (running) {
+      interval = setInterval(() => {
+        let date = new Date();
+
+        let newDate = date.getTime() - fixedDate.getTime();
+        let newTime = new Date(newDate);
+
+        let hoursDiff = Math.round(
+          (date.getTime() - fixedDate.getTime()) / (1000 * 3600)
+        );
+
+        let num = Math.round(hoursDiff / 10);
+
+        let values = [];
+        for (let i = 0; i < num; i++) {
+          values.push({
+            id: i,
+            type: "full",
+          });
+        }
+        setItems(values);
+
+        setSeconds(newTime.getSeconds());
+        setMinutes(newTime.getMinutes());
+        setHours(newTime.getUTCHours());
+        setDays(date.getDate() - fixedDate.getDate());
+      }, 1000);
+    }
+  }, [running]);
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
+    <S.Main
+      style={{
+        backgroundImage: `url(${background.src})`,
+      }}
+    >
+      <S.LogoContainer>
+        <img
+          style={{
+            width: 160,
+            height: 43,
+          }}
+          src="./img/logooncrets.png"
         />
-      </div>
+      </S.LogoContainer>
+      <S.Content>
+        <CountUp />
+        <S.Title>Durante esse tempo de feira</S.Title>
+        <S.Infos>
+          <S.InfosSteel>
+            <S.CounterSteel>
+              {Math.round(
+                (days * 86400 + hours * 3600 + minutes * 60 + seconds) * 0.5
+              ).toLocaleString("pt-BR") + "KG"}
+            </S.CounterSteel>
+            <S.CounterSteelText>
+              de aço, foram protendidos no Brasil
+            </S.CounterSteelText>
+          </S.InfosSteel>
 
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
+          <S.Separator />
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+          <S.InfosCarbon>
+            <S.BoxContainer>
+              {items.length > 0
+                ? items.map((box, i) =>
+                    i === items.length - 1 ? <S.Box /> : <S.BoxFull />
+                  )
+                : null}
+            </S.BoxContainer>
+            <S.CounterCarbonText>
+              e com a Oncrets o potencial é reduzir {items.length - 1}m³ de CO2
+              durante esse tempo.
+            </S.CounterCarbonText>
+          </S.InfosCarbon>
+        </S.Infos>
+      </S.Content>
+    </S.Main>
+  );
 }
