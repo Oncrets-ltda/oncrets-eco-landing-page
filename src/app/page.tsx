@@ -93,7 +93,7 @@ export default function Home() {
                     i === items.length - 1 ? (
                       <S.Box key={box.id} />
                     ) : (
-                      <S.BoxFull id={box.id} />
+                      <S.BoxFull key={box.id} />
                     )
                   )
                 : null}
