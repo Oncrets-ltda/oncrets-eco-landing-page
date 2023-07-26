@@ -90,7 +90,11 @@ export default function Home() {
             <S.BoxContainer>
               {items.length > 0
                 ? items.map((box, i) =>
-                    i === items.length - 1 ? <S.Box /> : <S.BoxFull />
+                    i === items.length - 1 ? (
+                      <S.Box key={box.id} />
+                    ) : (
+                      <S.BoxFull id={box.id} />
+                    )
                   )
                 : null}
             </S.BoxContainer>
