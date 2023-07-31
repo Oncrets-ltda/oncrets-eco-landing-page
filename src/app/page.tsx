@@ -21,7 +21,7 @@ export default function Home() {
   Chart.register(CategoryScale);
 
   useEffect(() => {
-    const fixedDate = new Date(2023, 6, 24, 15, 0, 0);
+    const fixedDate = new Date(2023, 6, 31, 0, 0, 0);
 
     let interval;
     if (running) {
