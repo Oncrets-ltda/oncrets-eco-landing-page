@@ -88,19 +88,22 @@ export default function Home() {
 
           <S.InfosCarbon>
             <S.BoxContainer>
-              {items.length > 0
-                ? items.map((box, i) =>
-                    i === items.length - 1 ? (
-                      <S.Box key={box.id} />
-                    ) : (
-                      <S.BoxFull key={box.id} />
-                    )
+              {items.length > 0 ? (
+                items.map((box, i) =>
+                  i === items.length - 1 ? (
+                    <S.Box key={box.id} />
+                  ) : (
+                    <S.BoxFull key={box.id} />
                   )
-                : null}
+                )
+              ) : (
+                <S.Box />
+              )}
             </S.BoxContainer>
             <S.CounterCarbonText>
-              e com a Oncrets o potencial é reduzir {items.length - 1}m³ de CO2
-              durante esse tempo.
+              e com a Oncrets o potencial é reduzir{" "}
+              {items.length - 1 > 0 ? items.length - 1 : 1}m³ de CO2 durante
+              esse tempo.
             </S.CounterCarbonText>
           </S.InfosCarbon>
         </S.Infos>
