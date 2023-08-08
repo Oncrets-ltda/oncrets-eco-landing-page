@@ -11,7 +11,7 @@ export default function CountUp() {
   const [days, setDays] = useState(0);
 
   useEffect(() => {
-    const fixedDate = new Date(2023, 6, 31, 0, 0, 0);
+    const fixedDate = new Date(2023, 8, 8, 0, 0, 0);
 
     let interval;
     if (running) {
